@@ -13,7 +13,7 @@ Library.ShowToggleFrameInKeybinds = true
 Library:Notify('Loaded Konan.cc')
 
 local Window = Library:CreateWindow({
-    Title = 'Konan.lua Buyers🌟',
+    Title = 'Konan.lua Buyers💸',
     TitleAlign = Enum.TextXAlignment.Center,
     Center = true,
     AutoShow = true,
@@ -27,7 +27,7 @@ local Tabs = {
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
 
-local LeftGroupBox = Tabs.Main:AddLeftGroupbox('General Settings')
+local LeftGroupBox = Tabs.Main:AddLeftGroupbox('Legit')
 
 
 
@@ -82,14 +82,13 @@ LeftGroupBox:AddToggle('LookAt', {
     end
 })
 
-LeftGroupBox:AddToggle('resolvert', {
+LeftGroupBox:AddToggle('resolver', {
     Text = 'Resolver',
     Default = false,
     Callback = function(Value)
         getgenv().Francium.ResolverEnabled = Value
     end
 })
-
 
 local DickHead = Tabs.Main:AddLeftGroupbox('Camera')
 
@@ -190,8 +189,8 @@ RightGroupBox:AddToggle('AutoPrediction', {
 
 -- Dropdown for Auto Prediction Mode
 RightGroupBox:AddDropdown('AutoPredMode', {
-    Values = { 'AdvanceCalculation', 'PingBased', 'Calculation', 'Blatant' },
-    Default = getgenv().Francium.AutoPredMode == 'PingBased' and 2 or 1, -- Default to PingBased
+    Values = { 'SemiBlatant', 'Legit', 'SemiLegit', 'Blatant' },
+    Default = getgenv().Francium.AutoPredMode == 'Legit' and 2 or 1, -- Default to Legit
     Text = 'Auto Prediction Mode',
     Callback = function(Value)
         getgenv().Francium.AutoPredMode = Value
@@ -291,7 +290,7 @@ MacroGroup:AddButton('Macro', function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/CookieScript/Trace.Iol/refs/heads/main/Macro", true))()
         Library:Notify('Macro Enabled')
     else
-        getgenv().Francium.Macro = "OFF"
+        getgenv().Konan.Macro = "OFF"
         Library:Notify('Macro Disabled')
     end
 end)
@@ -598,8 +597,8 @@ SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({ "MenuKeybind" })
 
 ThemeManager:SetFolder("KonanUi")
-SaveManager:SetFolder("Konan.cc/spec")
-SaveManager:SetSubFolder("spec")
+SaveManager:SetFolder("Konan.cc/Config")
+SaveManager:SetSubFolder("Config")
 
 SaveManager:BuildConfigSection(Tabs["UI Settings"])
 ThemeManager:ApplyToTab(Tabs["UI Settings"])
@@ -1059,11 +1058,11 @@ local function updatePredictionValue()
                         break
                     end
                 end
-            elseif getgenv().Francium.AutoPredMode == "Calculation" then
+            elseif getgenv().Francium.AutoPredMode == "SemiLegit" then
                 local calculatedValue = 0.1 + (ping / 1000) * 0.32
                 getgenv().Francium.HorizontalPrediction = calculatedValue
                 getgenv().Francium.VerticalPrediction = calculatedValue
-            elseif getgenv().Francium.AutoPredMode == "AdvanceCalculation" then
+            elseif getgenv().Francium.AutoPredMode == "SemiBlatany" then
                 for i = 1, #predictionTable do
                     if ping < predictionTable[i][1] then
                         local pingBase = predictionTable[i][2]

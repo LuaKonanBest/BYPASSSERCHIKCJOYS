@@ -13,7 +13,7 @@ Library.ShowToggleFrameInKeybinds = true
 Library:Notify('Loaded Konan.cc')
 
 local Window = Library:CreateWindow({
-    Title = 'Konan.lua Buyers💸',
+    Title = 'Konan.lua Buyers🌟',
     TitleAlign = Enum.TextXAlignment.Center,
     Center = true,
     AutoShow = true,
@@ -82,13 +82,130 @@ LeftGroupBox:AddToggle('LookAt', {
     end
 })
 
-LeftGroupBox:AddToggle('resolver', {
+LeftGroupBox:AddToggle('resolvert', {
     Text = 'Resolver',
     Default = false,
     Callback = function(Value)
         getgenv().Francium.ResolverEnabled = Value
     end
 })
+
+LeftGroupBox:AddToggle('Triggerbot', {
+    Text = 'Triggerbot',
+    Default = getgenv().TRIGGERBOT_ENABLED,
+    Callback = function(Value)
+        getgenv().TRIGGERBOT_ENABLED = Value
+    end
+})
+
+--// Services
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+local Workspace = game:GetService("Workspace")
+
+--// Variables
+local LocalPlayer = Players.LocalPlayer
+local Camera = Workspace.CurrentCamera
+
+getgenv().TRIGGERBOT_ENABLED = false
+
+--// Startup Effect
+local function startupEffect()
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.IgnoreGuiInset = true
+    screenGui.Parent = game.CoreGui
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Size = UDim2.new(0.5, 0, 0.2, 0)
+    textLabel.Position = UDim2.new(0.25, 0, 0.4, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Text = "Konan"
+    textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+    textLabel.TextStrokeTransparency = 0
+    textLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    textLabel.Font = Enum.Font.GothamBlack
+    textLabel.TextScaled = true
+    textLabel.Parent = screenGui
+
+    local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local textTweenOut = TweenService:Create(textLabel, tweenInfo, { TextTransparency = 1, TextStrokeTransparency = 1 })
+
+    textLabel:TweenSize(UDim2.new(0.6, 0, 0.25, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 2, true)
+    task.wait(2)
+
+    textTweenOut:Play()
+    task.wait(3)
+
+    screenGui:Destroy()
+end
+
+--// Enemy Check
+local function isEnemy(player)
+    return player and player ~= LocalPlayer
+end
+
+--// Wall Check
+local function isWallBetween(startPos, endPos)
+    local rayParams = RaycastParams.new()
+    rayParams.FilterType = Enum.RaycastFilterType.Blacklist
+    rayParams.IgnoreWater = true
+    rayParams.FilterDescendantsInstances = {LocalPlayer.Character, Camera}
+
+    local result = Workspace:Raycast(startPos, (endPos - startPos).Unit * (endPos - startPos).Magnitude, rayParams)
+    return result and result.Instance and not result.Instance:IsDescendantOf(Players:GetPlayerFromCharacter(result.Instance.Parent))
+end
+
+--// Target Detection
+local function getTarget()
+    local origin = Camera.CFrame.Position
+    local direction = Camera.CFrame.LookVector * 1000
+    local rayParams = RaycastParams.new()
+    rayParams.FilterType = Enum.RaycastFilterType.Blacklist
+    rayParams.IgnoreWater = true
+    rayParams.FilterDescendantsInstances = {LocalPlayer.Character, Camera}
+
+    local result = Workspace:Raycast(origin, direction, rayParams)
+
+    if result and result.Instance then
+        local character = result.Instance.Parent
+        local player = Players:GetPlayerFromCharacter(character)
+        local distance = (origin - result.Position).Magnitude
+
+        if isEnemy(player) and not isWallBetween(origin, result.Position) then
+            return player, distance
+        end
+    end
+    return nil, nil
+end
+
+--// Tap Simulation
+local function simulateTap(distance)
+    local screenSize = Camera.ViewportSize
+    local tapX, tapY = screenSize.X / 2, screenSize.Y / 2
+
+    local delay = math.clamp(distance / 1000, 0.002, 0.01)
+
+    VirtualInputManager:SendMouseButtonEvent(tapX, tapY, 0, true, game, 0)
+    task.wait(delay)
+    VirtualInputManager:SendMouseButtonEvent(tapX, tapY, 0, false, game, 0)
+end
+
+--// Triggerbot Loop
+RunService.RenderStepped:Connect(function()
+    if getgenv().TRIGGERBOT_ENABLED then
+        local target, distance = getTarget()
+        if target then
+            print("Konan TRIGGERBOT ACTIVATED!")
+            simulateTap(distance)
+        end
+    end
+end)
+
+--// Show intro
+startupEffect()
 
 local DickHead = Tabs.Main:AddLeftGroupbox('Camera')
 
@@ -189,8 +306,8 @@ RightGroupBox:AddToggle('AutoPrediction', {
 
 -- Dropdown for Auto Prediction Mode
 RightGroupBox:AddDropdown('AutoPredMode', {
-    Values = { 'SemiBlatant', 'Legit', 'SemiLegit', 'Blatant' },
-    Default = getgenv().Francium.AutoPredMode == 'Legit' and 2 or 1, -- Default to Legit
+    Values = { 'AdvanceCalculation', 'PingBased', 'Calculation', 'Blatant' },
+    Default = getgenv().Francium.AutoPredMode == 'PingBased' and 2 or 1, -- Default to PingBased
     Text = 'Auto Prediction Mode',
     Callback = function(Value)
         getgenv().Francium.AutoPredMode = Value
@@ -290,7 +407,7 @@ MacroGroup:AddButton('Macro', function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/CookieScript/Trace.Iol/refs/heads/main/Macro", true))()
         Library:Notify('Macro Enabled')
     else
-        getgenv().Konan.Macro = "OFF"
+        getgenv().Francium.Macro = "OFF"
         Library:Notify('Macro Disabled')
     end
 end)
@@ -569,6 +686,42 @@ spawn(function()
     end
 end)
 
+--// SPINBOT SETUP
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+local SpinEnabled = false
+local SpinSpeed = 15
+
+--// SPINBOT LOOP
+RunService.RenderStepped:Connect(function()
+    if SpinEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        local root = LocalPlayer.Character.HumanoidRootPart
+        root.CFrame = root.CFrame * CFrame.Angles(0, math.rad(SpinSpeed), 0)
+    end
+end)
+
+--// UI ELEMENTS
+Visuals:AddToggle("SpinbotToggle", {
+    Text = "Enable Spinbot",
+    Default = false,
+    Tooltip = "Toggle character spin",
+}):OnChanged(function(value)
+    SpinEnabled = value
+end)
+
+Visuals:AddSlider("SpinSpeedSlider", {
+    Text = "Spin Speed",
+    Default = 15,
+    Min = 1,
+    Max = 50,
+    Rounding = 0,
+    Compact = false,
+}):OnChanged(function(value)
+    SpinSpeed = value
+end)
+
 -- UI Settings tab (kept as-is)
 local MenuGroup = Tabs["UI Settings"]:AddLeftGroupbox("Menu")
 
@@ -597,8 +750,8 @@ SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({ "MenuKeybind" })
 
 ThemeManager:SetFolder("KonanUi")
-SaveManager:SetFolder("Konan.cc/Config")
-SaveManager:SetSubFolder("Config")
+SaveManager:SetFolder("Konan.cc/spec")
+SaveManager:SetSubFolder("spec")
 
 SaveManager:BuildConfigSection(Tabs["UI Settings"])
 ThemeManager:ApplyToTab(Tabs["UI Settings"])
@@ -709,27 +862,8 @@ getgenv().Francium.RESOLVER = "MoveDirection"
 
 
 
-local game_support = {
-    [2788229376] = { Remote = "MainEvent", Argument = "UpdateMousePosI2" },
-    [12238627497] = { Remote = "MainEvent", Argument = "UpdateMousePos" },
-    [5602055394] = { Remote = "MAINEVENT", Argument = "MousePos" },
-    [17403265390] = { Remote = "MAINEVENT", Argument = "MOUSE" },
-    [17403166075] = { Remote = "MAINEVENT", Argument = "MOUSE" },
-    [18111448661] = { Remote = "MAINEVENT", Argument = "MOUSE" },
-    [15186202290] = { Remote = "MAINEVENT", Argument = "MOUSE" },
-    [11143225577] = { Remote = "MainEvent", Argument = "UpdateMousePos" },
-    [15763494605] = { Remote = "MAINEVENT", Argument = "MOUSE" },
-    [125825216602676] = { Remote = "MAINEVENT", Argument = "MOUSE" },
-    [15166543806] = { Remote = "MAINEVENT", Argument = "MoonUpdateMousePos" },
-    [17897702920] = { Remote = "MainEvent", Argument = "UpdateMousePos" },
-    [16033173781] = { Remote = "MainEvent", Argument = "UpdateMousePosI2" },
-    [7213786345] = { Remote = "MainEvent", Argument = "UpdateMousePosI2" },
-    [9825515356] = { Remote = "MainEvent", Argument = "MousePosUpdate" },
-    [16859411452] = { Remote = "MainEvent", Argument = "UpdateMousePos" },
-    [117734153242642] = { Remote = "MainEvent", Argument = "UpdateMousePos" },
-    [14277620939] = { Remote = "MainEvent", Argument = "UpdateMousePos" },
-    [17344804827] = { Remote = "MainEvent", Argument = "UpdateMousePos" }
-}
+local game_support = 
+loadstring(game:HttpGet("https://raw.githubusercontent.com/LuarmorIsGay5/automatic-spork/refs/heads/main/Argument.txt",true))() 
 
 
 
@@ -1058,11 +1192,11 @@ local function updatePredictionValue()
                         break
                     end
                 end
-            elseif getgenv().Francium.AutoPredMode == "SemiLegit" then
+            elseif getgenv().Francium.AutoPredMode == "Calculation" then
                 local calculatedValue = 0.1 + (ping / 1000) * 0.32
                 getgenv().Francium.HorizontalPrediction = calculatedValue
                 getgenv().Francium.VerticalPrediction = calculatedValue
-            elseif getgenv().Francium.AutoPredMode == "SemiBlatany" then
+            elseif getgenv().Francium.AutoPredMode == "AdvanceCalculation" then
                 for i = 1, #predictionTable do
                     if ping < predictionTable[i][1] then
                         local pingBase = predictionTable[i][2]

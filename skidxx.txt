@@ -84,8 +84,8 @@ local Psalms = {
         jumpoffset3 = 0.270,
         
         ShootDelay = 0.22,
-        NoGroundShot = false,
-        AutoAir = false,
+        NoGroundShot = True,
+        AutoAir = True,
         
         TracerEnabled = true,
         LookAt = false,
@@ -120,7 +120,7 @@ UnlockOnKO = false,
 CamWallCheck = false, 
 CAMKo = false,
 bool_at_tp = false, 
-MacroDance = "YungBlud",
+MacroDance = "VPose",
 MacroDanceDelay = 0.300,
     }
 }
@@ -136,8 +136,8 @@ local TargetAimbot = {
     Enabled = true,
     Keybind = Enum.KeyCode.Q,
     Autoselect = false,
-    Prediction = 0.145, 
-    RealPrediction = 0.145, 
+    Prediction = 0.12588, 
+    RealPrediction = 0.12588, 
     Resolver = false, 
     ResolverType = "Recalculate", 
     JumpOffset = 0.06, 
@@ -167,7 +167,7 @@ local TargetAimbot = {
     HitEffect = false,
     HitEffectType = "Coom", --  {{ Nova, Crescent Slash, Coom, Cosmic Explosion, Slash, Atomic Slash, Aura Burst }}
     HitEffectColor = Color3.fromRGB(255, 255, 255),
-    HitSounds = false,
+    HitSounds = true,
     HitSound = "Bameware",
     HitChams = false,
     HitChamsMaterial = Enum.Material.Neon,
@@ -2128,7 +2128,7 @@ end))
 if game.PlaceId == 9825515356 or game.PlaceId == 2788229376 then
     Psalms.Tech.LockType = "Index"
 else
-    Psalms.Tech.LockType = "Namecall"
+    Psalms.Tech.LockType = "FireServer"
 end
 
 local lastPosition = nil
@@ -3515,9 +3515,9 @@ PredictionSection:List({
     Name = "Auto Prediction Mode",
 Flag = "Auto Prediction Mode",
     Options = {
-         "Default",
-        "Math Based", 
-        "Sets Based",
+         "PingBased",
+        "SemiLegit", 
+        "Blatant",
         "Calculate"
     },
     Default = Psalms.Tech.APMODE,
@@ -3801,9 +3801,9 @@ Flag = "Macro Speed",
 MTSectionS:Divider({Name = "Blatant"})
 
 
-MTSectionS:Button({Name = "Load WalkSpeed", Callback = function()
+MTSectionS:Button({Name = "WalkSpeed", Callback = function()
     if Macro23 then
-        Library:Notification("Already Loaded.", 3)
+        Library:Notification("Loaded.", 3)
         return
     end
 
@@ -3964,7 +3964,7 @@ end
                end
                 
                 ImageButton.Image = "rbxassetid://96086736054343"
-                Library:Notification("Target Locked: <font color='" .. RealColor .. "'>" .. tostring(TargetPlr.DisplayName) .. "</font>", 2)
+                Library:Notification("Kill that nigga": <font color='" .. RealColor .. "'>" .. tostring(TargetPlr.DisplayName) .. "</font>", 2)
             else
                 Library:Notification("No target found", 2)
             end
@@ -3994,7 +3994,7 @@ end)
 
 
         UserInputService.InputBegan:Connect(function(input, processed)
-            if not processed and input.KeyCode == Enum.KeyCode.DPadDown then
+            if not processed and input.KeyCode == Enum.KeyCode.ButtonY then
                 toggleLock()
             end
         end)
@@ -4170,8 +4170,8 @@ Flag = "Cam Resolver",
     end
 })
 Bumt:Textbox({
-    Name = "Camera Smoothness",
-Flag = "Cam Smoothness",
+    Name = "Smoothness",
+Flag = "Smoothness",
     Default = tostring(Psalms.Tech.smoothness),
     Callback = function(a)
         Psalms.Tech.smoothness = tonumber(a)

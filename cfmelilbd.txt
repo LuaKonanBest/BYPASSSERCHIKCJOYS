@@ -151,7 +151,7 @@ repeat wait() until game:IsLoaded()
 
 
 
-local repo = 'https://raw.githubusercontent.com/khen791/library/main/'
+local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
 
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/LionTheGreatRealFrFr/MobileLinoriaLib/main/Library.lua"))()
@@ -171,7 +171,7 @@ local player = game.Players.LocalPlayer
 local playerGuii = player:WaitForChild("PlayerGui")
 
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "khen.cc"
+screenGui.Name = "AWOP.GG"
 screenGui.Parent = playerGuii
 screenGui.ResetOnSpawn = false
 screenGui.IgnoreGuiInset = true

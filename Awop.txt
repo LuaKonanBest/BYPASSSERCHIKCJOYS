@@ -7,8 +7,6 @@ game.StarterGui:SetCore("SendNotification", {
     Duration = 15;
 })
 task.wait(0.5)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/aa8283/i/refs/heads/main/Protected_2547730226887233.txt"))() 
-
 loadstring(game:HttpGet("https://raw.githubusercontent.com/khenn791/script-khen/refs/heads/main/larplarpbypasser.txt"))()
 
 getgenv().venus = {
@@ -1298,8 +1296,8 @@ local last_render = 0
 local drawings = {
     crosshair = {},
     text = {
-        Drawing.new('Text', {Size = 13, Font = 2, Outline = true, Text = 'Failurty', Color = Color3.new(255, 255, 255)}),
-        Drawing.new('Text', {Size = 13, Font = 2, Outline = true, Text = '.CC', Color = Color3.fromRGB(86, 87, 142)}),
+        Drawing.new('Text', {Size = 13, Font = 2, Outline = true, Text = 'AWOP', Color = Color3.new(255, 255, 255)}),
+        Drawing.new('Text', {Size = 13, Font = 2, Outline = true, Text = '.GG', Color = Color3.fromRGB(86, 87, 142)}),
     }
 }
 
@@ -1602,11 +1600,11 @@ SaveManager:SetLibrary(Library)
 SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({ 'MenuKeybind' })
 
-if not isfolder("failurty") then makefolder("failurty") end
-if not isfolder("failurty/configss") then makefolder("failurty/configss") end
+if not isfolder("AWOP.GG") then makefolder("AWOP") end
+if not isfolder("AWOP/configss") then makefolder("AWOP/configss") end
 
-ThemeManager:SetFolder('failurty.CC')
-SaveManager:SetFolder('failurty/configss')
+ThemeManager:SetFolder('AWOP.GG')
+SaveManager:SetFolder('AWOP/configss')
 
 SaveManager:BuildConfigSection(Tabs['UI Settings'])
 ThemeManager:ApplyToTab(Tabs['UI Settings'])

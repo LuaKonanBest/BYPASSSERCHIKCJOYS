@@ -1,6 +1,6 @@
 game.StarterGui:SetCore("SendNotification", {
-    Title = "UPDATE DONE!"; 
-    Text = "Script has fixed all error functions by khen.cc and elias."; 
+    Title = "2025SCRIPT"; 
+    Text = "AWOP.GG DO BEST"; 
     Duration = 15;
 })
 task.wait(0.2)

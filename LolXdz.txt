@@ -304,7 +304,7 @@ local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(
 
     local currentTime = os.date("%H:%M:%S")  -- Format the time as HH:MM:SS
 
-    Library:SetWatermark(('AWOP.GG [Buy.gg] | %s fps | %s ms |%s Time'):format(
+    Library:SetWatermark(('AWOP.GG [Buy.gg] | %s fps | %s ms | Time: %s'):format(
         math.floor(FPS)
         math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue()),
         currentTime

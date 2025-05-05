@@ -1863,11 +1863,13 @@ function spawnButton()
             UICorner.CornerRadius = UDim.new(0, 10)
             UICorner.Parent = LockButton
 
-            LockButton.MouseButton1Click:Connect(function()
-                ToggleLock() -- Trigger ToggleLock when clicked
-            end)
-        end
+            LockButton.MouseButton1Click:Connect(ToggleLock)
+
+UserInputService.InputBegan:Connect(function(input, processed)
+    if not processed and input.KeyCode == Enum.KeyCode.ButtonY then
+        ToggleLock()
     end
+end)
 
     setupGui()
 
